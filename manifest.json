@@ -17,18 +17,23 @@
 		"default_popup" : "html/popup.html"
 	},
 
-	
+  "background": {
+    "scripts": ["js/scheduler.js","js/statistics.js","js/background.js"]
+  },
+
 	"permissions": [
 		"tabs",
-		"browsingData"
+		"browsingData",
+    "storage",
+    "webRequest",
+    "http://*/*"
 	],
 
 	"content_scripts": [{	
 		"matches":["http://*/*","https://*/*"],
 		"js":[
-			"res/js/jquery-2.0.3.min.js"
+			"js/timer.js"
 		],
-		"run_at":"document_end",
 		"all_frames":false
 	}],
    "content_security_policy": "script-src 'self' https://ssl.google-analytics.com 'unsafe-eval'; object-src 'self'"

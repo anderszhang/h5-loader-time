@@ -1,10 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
     <title></title>
-    <link type="text/css" href="../res/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../res/css/bootstrap.min.css"/>
+    <style type="text/css">
+        .btn-bar{
+            margin-top: 15px;
+        }
+    </style>
 </head>
 <body>
-
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>任务配置</h1>
+            <textarea id="taskCfg" class="form-control" rows="10"></textarea>
+        </div>
+    </div>
+    <div class="row text-right btn-bar" >
+        <div class="col-md-12">
+            <button type="button" class="btn btn-default">重置</button>
+            <button type="button" class="btn btn-primary">保存</button>
+            <button type="button" class="btn btn-success">开始</button>
+        </div>
+    </div>
+</div>
 </body>
 </html>
