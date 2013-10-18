@@ -30,6 +30,9 @@ h5.statistic = {
   },
 
   getCurTaskData:function(){
+    if(!this.task){
+      return;
+    }
     var key = this.task.url,TData = null;
     if(key){
       TData = this.dataContainer[key];
@@ -52,8 +55,13 @@ h5.statistic = {
       }
     }
     return TData;
+  },
+
+  saveData:function(){
+    chrome.storage.local.set(this.dataContainer);
+  },
+
+  getData : function(){
+    return this.dataContainer;
   }
-
-
-
 };

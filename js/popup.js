@@ -5,7 +5,7 @@ $(function(){
   //打开配置界面
   $('#cfgBtn').click(function(){
     chrome.tabs.create({
-      url:'html/config.html',
+      url:'html/options.html',
       active: true
     }, function (){
 

@@ -5,6 +5,7 @@
 var h5 = window.h5||{};
 h5.bg = {
   statistic : h5.statistic,
+  analyze: h5.analyze,
   scheduler : h5.scheduler,
   roe : chrome.runtime && chrome.runtime.sendMessage ? 'runtime' : 'extension',
 
@@ -63,17 +64,13 @@ h5.bg = {
      var self = this;
      //注册update监听
      chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
-        if(changeInfo && changeInfo.url){
+        if(changeInfo && changeInfo.url && changeInfo.url.indexOf('chrome-devtools://')<0){
           self.statistic.setTaskContext(changeInfo);
         }
      });
      chrome.tabs.reload();
    },
 
-  //手动采集结束
-  manaulStop: function(){
-    this.stop();
-  },
 
   next: function(data){
     var task = this.scheduler.nextTask();
@@ -91,6 +88,8 @@ h5.bg = {
 
   stop: function(){
     this.scheduler.stop();
+    this.analyze.setData(this.statistic.getData());
+    this.analyze.start();
   },
 
   init:function(){
