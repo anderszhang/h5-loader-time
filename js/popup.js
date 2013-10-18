@@ -12,9 +12,17 @@ $(function(){
     })
   });
 
-  //测量
-  $('#startBtn').click(function(){
-    var roe = chrome.runtime && chrome.runtime.sendMessage ? 'runtime' : 'extension';
-    chrome[roe].sendMessage({type:"start"});
+  //自动收集开始
+  $('#autoStartBtn').click(function(){
+    chrome.runtime.sendMessage({type:"autoStart"});
+  });
+
+  //手动模式开始
+  $('#manualStartBtn').click(function(){
+    chrome.runtime.sendMessage({type:"manualStart"});
+  });
+  //手动模式停止
+  $('#manualStopBtn').click(function(){
+    chrome.runtime.sendMessage({type:"manualStop"});
   });
 });

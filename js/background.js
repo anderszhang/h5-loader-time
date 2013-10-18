@@ -17,28 +17,35 @@ h5.bg = {
    chrome[this.roe].onMessage.addListener(function(request, sender, sendResponse) {
 
        var type = request.type;
-      console.log(type);
-       if(type == "start"){
+       if(type == "autoStart"){
          self.start();
-       }else if(type =="next"){
+       }else if(type == 'manualStart'){
+         self.manaulStart();
+       }else if(type == 'manualStop'){
+         self.stop();
+       }else if(type =="loadComplete"){
          self.statistic.savePagePerformance(request);
-         self.next(request);
+         if( self.scheduler.isAutoMode && self.scheduler.isRuning){
+           self.next(request);
+         }
        }
    });
    //监听响应，此次主要是获取Response头部的数据Size
    chrome.webRequest.onResponseStarted.addListener(function(detail) {
-       self.statistic.saveSrcPerformance(detail);
+       if( self.scheduler.isRuning){
+         self.statistic.saveSrcPerformance(detail);
+       }
    },{urls: ["http://*/*","https://*/*"]}, ["responseHeaders"]);
   },
 
 
   start : function(){
-    if(!this.scheduler.isAvailable()){
+    this.scheduler.setAutoMode(true);
+    if(!this.scheduler.start()){
       return;
-    }
+    };
     var self = this,
         task = this.scheduler.getCurTask();
-    console.log("start"+task.url);
     this.statistic.setTaskContext(task);
     chrome.tabs.create({
         url : task.url
@@ -47,6 +54,25 @@ h5.bg = {
         self.openTab = tab;
      });
 
+  },
+
+   //手动采集开始
+   manaulStart : function(){
+     this.scheduler.setAutoMode(false);
+     this.scheduler.start();
+     var self = this;
+     //注册update监听
+     chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
+        if(changeInfo && changeInfo.url){
+          self.statistic.setTaskContext(changeInfo);
+        }
+     });
+     chrome.tabs.reload();
+   },
+
+  //手动采集结束
+  manaulStop: function(){
+    this.stop();
   },
 
   next: function(data){
@@ -69,6 +95,28 @@ h5.bg = {
 
   init:function(){
     this.initListenter();
+  },
+
+  changeManaulUI : function(){
+    //创建提醒
+    chrome.notifications.create('',{
+        type:"basic",
+        iconUrl: "../res/img/logo_16.png",
+        title: "",
+        message: "性能参数手动采集中........",
+        eventTime: Date.now() + 900000000,
+        buttons:[
+          {title:'停止'}
+        ]
+      },function(){}
+    );
+
+    //按钮停止
+    chrome.notifications.onButtonClicked.addListener(function (notificationId, buttonIndex){
+      chrome.notifications.clear(notificationId, function(){
+
+      });
+    });
   }
 };
 

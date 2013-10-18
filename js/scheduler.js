@@ -4,6 +4,9 @@
 var h5 = window.h5||{};
 h5.scheduler = {
 
+  isRuning : false,
+  isAutoMode : false,
+
   curTaskIdx : 0,
 
   taskSet : [
@@ -36,12 +39,24 @@ h5.scheduler = {
     this.taskSet = taskSet;
   },
 
+  start:function(){
+    this.curTaskIdx = 0;
+    this.isRuning = true;
+  },
+
   stop:function(){
     this.curTaskIdx = 0;
+    this.isRuning = false;
+
   },
 
   isAvailable:function(){
     var ln = this.taskSet.length;
     return ln > 0 && this.curTaskIdx<ln;
+  },
+
+  setAutoMode:function(mode){
+    this.isAutoMode = mode;
   }
+
 };

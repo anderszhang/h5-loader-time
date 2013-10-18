@@ -11,7 +11,7 @@
             var time = String(((t.loadEventEnd - start) / 1000).toPrecision(3)).substring(0, 4);
             var roe = chrome.runtime && chrome.runtime.sendMessage ? 'runtime' : 'extension';
             chrome[roe].sendMessage({
-              type: 'next',
+              type: 'loadComplete',
               time: time,
               timing: t});
         }
