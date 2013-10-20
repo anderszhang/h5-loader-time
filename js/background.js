@@ -90,6 +90,9 @@ h5.bg = {
     this.scheduler.stop();
     this.analyze.setData(this.statistic.getData());
     this.analyze.start();
+    chrome.tabs.update({
+      url : 'html/result.html'
+    });
   },
 
   init:function(){
