@@ -1,64 +1,64 @@
 /**
  * Created by shbzhang on 13-10-17.
  */
-var h5 = window.h5||{};
+var h5 = window.h5 || {};
 h5.scheduler = {
 
-  isRuning : false,
-  isAutoMode : false,
+  isRuning: false,
+  isAutoMode: false,
 
-  curTaskIdx : 0,
+  curTaskIdx: 0,
 
-  taskSet : [
+  taskSet: [
     {
       'title': '去哪儿',
       'url': 'http://touch.qunar.com',
-      'beforeAction':'',
-      'filter':'bf.gif'
+      'beforeAction': '',
+      'filter': 'bf.gif'
     },
     {
       'title': '携程首页',
       'url': 'http://m.ctrip.com',
-      'beforeAction':''
+      'beforeAction': ''
     }
   ],
 
-  getCurTask: function(){
-    if(this.isAvailable()){
+  getCurTask: function () {
+    if (this.isAvailable()) {
       return this.taskSet[this.curTaskIdx];
     }
     return null;
   },
 
-  nextTask: function(){
+  nextTask: function () {
     this.curTaskIdx++;
     return this.getCurTask();
   },
 
-  setTaskSet:function(taskSet){
+  setTaskSet: function (taskSet) {
     this.taskSet = taskSet;
   },
 
-  start:function(){
-    if(!this.isRuning){
+  start: function () {
+    if (!this.isRuning) {
       this.curTaskIdx = 0;
       this.isRuning = true;
     }
     return this.isRuning;
   },
 
-  stop:function(){
+  stop: function () {
     this.curTaskIdx = 0;
     this.isRuning = false;
 
   },
 
-  isAvailable:function(){
+  isAvailable: function () {
     var ln = this.taskSet.length;
-    return ln > 0 && this.curTaskIdx<ln;
+    return ln > 0 && this.curTaskIdx < ln;
   },
 
-  setAutoMode:function(mode){
+  setAutoMode: function (mode) {
     this.isAutoMode = mode;
   }
 

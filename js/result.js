@@ -7,32 +7,32 @@
  */
 ;
 
-$(function(){
-	$('#nav_tabs').click(function(e){
-		var tab = $(e.target).parent();
-		if(tab.hasClass("active")){
-				return;
-		}
-		tab.addClass("active");
-		if(tab.data('val')=='time'){
-			container.show();
-			src_ctn.hide();
-			$('#src_tab').removeClass("active");
-		}else{
-			container.hide();
-			src_ctn.show();
-			$('#time_tab').removeClass("active");
-		}
-	});
+$(function () {
+  $('#nav_tabs').click(function (e) {
+    var tab = $(e.target).parent();
+    if (tab.hasClass("active")) {
+      return;
+    }
+    tab.addClass("active");
+    if (tab.data('val') == 'time') {
+      container.show();
+      src_ctn.hide();
+      $('#src_tab').removeClass("active");
+    } else {
+      container.hide();
+      src_ctn.show();
+      $('#time_tab').removeClass("active");
+    }
+  });
 
-	var container = $('#load_ctn'),
-	src_ctn = $('#src_ctn');
-	src_ctn.hide()
-	chrome.storage.local.get('result', function(data) {
-		console.log(data);
-	 	var loadTableHtml = _.template($('#load_time_tpl').html()),
-	 	srcTableHtml = _.template($('#load_src_tpl').html());
-	 	container.html(loadTableHtml(data));
-	 	src_ctn.html(srcTableHtml(data));
-	 });
+  var container = $('#load_ctn'),
+    src_ctn = $('#src_ctn');
+  src_ctn.hide()
+  chrome.storage.local.get('result', function (data) {
+    console.log(data);
+    var loadTableHtml = _.template($('#load_time_tpl').html()),
+      srcTableHtml = _.template($('#load_src_tpl').html());
+    container.html(loadTableHtml(data));
+    src_ctn.html(srcTableHtml(data));
+  });
 });
