@@ -40,8 +40,11 @@ h5.scheduler = {
   },
 
   start:function(){
-    this.curTaskIdx = 0;
-    this.isRuning = true;
+    if(!this.isRuning){
+      this.curTaskIdx = 0;
+      this.isRuning = true;
+    }
+    return this.isRuning;
   },
 
   stop:function(){

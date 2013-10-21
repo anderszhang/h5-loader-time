@@ -13,12 +13,15 @@ h5.analyze = {
 		var result = [],data = this.data;
 		for(var i in  data){
             var t = data[i];
+            this.acc = 0;
             var pData = {title: t.title, url :t.url};
+            console.log(t);
 			if(t.performance){
-                this.acc = 0;
                 pData.performance = this.analyzePageLoad(t.performance)
-			}
-
+			}else{
+                //否则为单页应用
+                pData.performance = this.analyzeSPAPageLoad(t.srcs);
+            }
             result.push(pData);
 		}
         //console.log('save Data'  + {result:result});
@@ -44,11 +47,35 @@ h5.analyze = {
         ]
 	},
 	
+    //分析单页应用性能
+    analyzeSPAPageLoad:function(data){
+        var ln =  data['xmlhttprequest'].length;
+        if(ln >0){
+             var ts = data['xmlhttprequest'][ln-1];
+             start = ts.timeStamp;
+             responseStart = ts.responseStartTime || start;
+             responseEnd = ts.completeEndTime || start;
+        }
+        return [
+            this.getPageData('redirect',0, 0),
+            this.getPageData('dns',0, 0),
+            this.getPageData('connect',0, 0),
+            this.getPageData('request', 0, responseStart - start>0),
+            this.getPageData('response',responseEnd - start, responseEnd - responseStart),
+            this.getPageData('dom',0, 0),
+            this.getPageData('domInteractive',0, 0),
+            this.getPageData('contentLoaded',0, 0),
+            this.getPageData('load',0, 0)
+        ]
+    },
+
 	analyzeSrcs :function(){
 
 	},
 
     getPageData: function(type,start, length, noacc){
+         start = Math.round(start);
+         length = Math.round(length);
         if (!noacc) {
             this.acc += length;
         }

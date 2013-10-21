@@ -15,7 +15,7 @@ h5.statistic = {
     }
   },
 
-  saveSrcPerformance: function(data){
+  saveSrcRequestTime: function(data){
     var TData = this.getCurTaskData();
     if(TData){
       var srcs = TData.srcs;
@@ -24,6 +24,36 @@ h5.statistic = {
     }
   },
 
+  saveSrcResponseStartTime: function(data){
+    var TData = this.getCurTaskData();
+    if(TData){
+      var srcs = TData.srcs;
+      var srcPfs= srcs[data.type];
+      //此处有优化空间
+      for(var i = 0 ; i<srcPfs.length;i++){
+        if(srcPfs[i].requestId = data. requestId){
+           srcPfs[i].responseStartTime = data.timeStamp;  
+        }
+      }
+      //srcs[data.type].push(data);
+      this.dataContainer[TData.url ] = TData;
+    }
+  },
+
+  saveSrcCompleteTime:function(data){
+    var TData = this.getCurTaskData();
+    if(TData){
+      var srcs = TData.srcs;
+      var srcPfs= srcs[data.type];
+      //此处有优化空间
+      for(var i = 0 ; i<srcPfs.length;i++){
+        if(srcPfs[i].requestId = data. requestId){
+           srcPfs[i].completeEndTime = data.timeStamp;  
+        }
+      }
+      this.dataContainer[TData.url ] = TData;
+    }
+  },
   setTaskContext:function(task){
     return this.task = task;
   },

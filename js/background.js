@@ -38,12 +38,27 @@ h5.bg = {
          }
        }
    });
+
+  //监听请求发起响应
+   chrome.webRequest.onSendHeaders.addListener(function(detail) {
+       if( self.scheduler.isRuning){
+         self.statistic.saveSrcRequestTime(detail);
+       }
+   },{urls: ["http://*/*","https://*/*"]}, []);
+
    //监听响应，此次主要是获取Response头部的数据Size
    chrome.webRequest.onResponseStarted.addListener(function(detail) {
        if( self.scheduler.isRuning){
-         self.statistic.saveSrcPerformance(detail);
+         self.statistic.saveSrcResponseStartTime(detail);
        }
    },{urls: ["http://*/*","https://*/*"]}, ["responseHeaders"]);
+
+   //监听完成时间
+   chrome.webRequest.onCompleted.addListener(function(detail) {
+      if( self.scheduler.isRuning){
+         self.statistic.saveSrcCompleteTime(detail,'onCompleted');
+       }
+   },{urls: ["http://*/*","https://*/*"]}, []);
   },
 
 
