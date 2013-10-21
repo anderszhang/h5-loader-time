@@ -63,6 +63,7 @@ h5.bg = {
 
 
   start : function(){
+    chrome.storage.local.clear();
     this.scheduler.setAutoMode(true);
     if(!this.scheduler.start()){
       return;

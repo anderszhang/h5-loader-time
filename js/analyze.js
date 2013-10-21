@@ -81,6 +81,9 @@ h5.analyze = {
                     totalSize = 0,
                     cacheSize =0;
                 for(var j =0;j<ln;j++){
+                    if(this.isFilterSrc(srcList[j].url)){
+                        continue;
+                    }
                     var size =  this.getSrcSize(srcList[j]);
                     if(srcList[j].fromCache){
                         cacheSize += size;
@@ -98,16 +101,19 @@ h5.analyze = {
 	},
 
     getSrcSize:function(src){
-       var headers = src.responseHeaders,
-        ln = headers.length;
-       for(var i  =0;i<ln;i++){
-            var header = headers[i];
-            if(header.name == 'Content-Length'){
-                return +header.value
-            }
+       var headers = src.responseHeaders;
+       if(headers){
+            var ln = headers.length;
+           for(var i  =0;i<ln;i++){
+                var header = headers[i];
+                if(header.name == 'Content-Length'){
+                    return +header.value
+                }
+           }
        }
        return 0;
     },
+
     getPageData: function(type,start, length, noacc){
          start = Math.round(start);
          length = Math.round(length);
@@ -123,5 +129,17 @@ h5.analyze = {
     },
 	setData:function(data){
 		this.data = data;
-	}
+	},
+
+    isFilterSrc:function(url){
+        var filters = ['http://s.c-ctrip.com/bf.gif','http://www.google-analytics.com/__utm.gif'],
+            ln = filters.length;
+
+        for(var i= 0;i<ln;i++){
+            if(url.indexOf(filters[i])>0){
+                return true;
+            }
+        }
+        return false;
+    }
 }
