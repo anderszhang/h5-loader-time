@@ -22,6 +22,7 @@ h5.analyze = {
                 //否则为单页应用
                 pData.performance = this.analyzeSPAPageLoad(t.srcs);
             }
+            pData.srcs = this.analyzeSrcs(t.srcs);
             result.push(pData);
 		}
         //console.log('save Data'  + {result:result});
@@ -69,10 +70,44 @@ h5.analyze = {
         ]
     },
 
-	analyzeSrcs :function(){
-
+	analyzeSrcs :function(srcs){
+        var result = [];
+        for(var i in srcs){
+            var srcList = srcs[i];
+            var ln = srcList.length;
+            if(ln>0){
+                var obj  = {type: i,totalCount: ln},
+                    cacheCount = 0,
+                    totalSize = 0,
+                    cacheSize =0;
+                for(var j =0;j<ln;j++){
+                    var size =  this.getSrcSize(srcList[j]);
+                    if(srcList[j].fromCache){
+                        cacheSize += size;
+                        cacheCount ++;
+                    }
+                    totalSize += size;
+                }
+                obj.cacheCount =cacheCount;
+                obj.totalSize = totalSize;
+                obj.cacheSize = cacheSize;
+                result.push(obj);
+            }
+        }
+        return result;
 	},
 
+    getSrcSize:function(src){
+       var headers = src.responseHeaders,
+        ln = headers.length;
+       for(var i  =0;i<ln;i++){
+            var header = headers[i];
+            if(header.name == 'Content-Length'){
+                return +header.value
+            }
+       }
+       return 0;
+    },
     getPageData: function(type,start, length, noacc){
          start = Math.round(start);
          length = Math.round(length);

@@ -33,6 +33,8 @@ h5.statistic = {
       for(var i = 0 ; i<srcPfs.length;i++){
         if(srcPfs[i].requestId = data. requestId){
            srcPfs[i].responseStartTime = data.timeStamp;  
+           srcPfs[i].responseHeaders = data.responseHeaders;
+           srcPfs[i].fromCache  = data.fromCache;
         }
       }
       //srcs[data.type].push(data);

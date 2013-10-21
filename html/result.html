@@ -12,21 +12,24 @@
 <body>
 
 <div class="container">
-	<h1>result</h1>
-
+	<h1>Result</h1>
+	<ul id="nav_tabs" class="nav nav-tabs nav-justified">
+        <li id="time_tab" data-val='time' class="active"><a href="#">载入时间</a></li>
+        <li id="scr_tab" data-val='src'><a href="#">载入资源</a></li>
+      </ul>
     <table id="load_ctn" class="table"> </table>
-
+    <table id="src_ctn" class="table" > </table>
 </div>
 <script type="text/template" id="load_time_tpl">
 	<%_.each(result,function(v,k){
 		var p = v.performance;
 		%>
 		<thead>
-		<tr>
+		<tr class="warning">
 			<th><%= v.title||''%></th>
 			<th colspan="3"><%= v.url%></th>
 		</tr>
-		<tr>
+		<tr class="warning">
 			<th>阶段</th>
 			<th>发起时间</th>
 			<th>长度</th>
@@ -43,6 +46,37 @@
 		 <%})%>
 		<tr>
 			<td colspan="4"></td>
+		</tr>
+    <%})%>
+</script>
+<script type="text/template" id="load_src_tpl">
+	<%_.each(result,function(v,k){
+		var s = v.srcs;
+		%>
+		<thead>
+		<tr class="warning">
+			<th><%= v.title||''%></th>
+			<th colspan="4"><%= v.url%></th>
+		</tr>
+		<tr class="warning">
+			<th>类型</th>
+			<th>数量</th>
+			<th>大小</th>
+			<th>缓存数量</th>
+			<th>缓存大小</th>
+		 </tr>
+		 </thead>
+		<%_.each(s,function(sv,pk){%>
+			<tr>
+				<td><%= sv.type%></td>
+				<td><%= sv.totalCount%></td>
+				<td><%= sv.totalSize%></td>
+				<td><%= sv.cacheCount%></td>
+				<td><%= sv.cacheSize%></td>
+		    </tr>
+		 <%})%>
+		<tr>
+			<td colspan="5"></td>
 		</tr>
     <%})%>
 </script>

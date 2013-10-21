@@ -5,12 +5,30 @@
  * Time: 下午10:33
  * To change this template use File | Settings | File Templates.
  */
+;
 
-console.log('result page');
-var container = $('#load_ctn');
+$(function(){
+	$('#nav_tabs').click(function(e){
+		var tab = $(e.target).parent();
+		if(tab.data('val')=='time'){
+			container.show();
+			src_ctn.hide();
+		}else{
+			container.hide();
+			src_ctn.show();
+		}
+		$('#time_tab').toggleClass("active");
+		$('#src_tab').toggleClass("active");
+	});
 
-chrome.storage.local.get('result', function(data) {
-	console.log(data);
- 	loadTableHtml = _.template($('#load_time_tpl').html());
- 	container.html(loadTableHtml(data));
- });
+	var container = $('#load_ctn'),
+	src_ctn = $('#src_ctn');
+	src_ctn.hide()
+	chrome.storage.local.get('result', function(data) {
+		console.log(data);
+	 	var loadTableHtml = _.template($('#load_time_tpl').html()),
+	 	srcTableHtml = _.template($('#load_src_tpl').html());
+	 	container.html(loadTableHtml(data));
+	 	src_ctn.html(srcTableHtml(data));
+	 });
+});
