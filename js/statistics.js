@@ -12,7 +12,6 @@ h5.statistic = {
     if(TData){
       TData.performance = data;
       this.dataContainer[TData.url] = TData ;
-      console.log(TData);
     }
   },
 

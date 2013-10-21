@@ -10,13 +10,40 @@
     </style>
 </head>
 <body>
-<div class="container">
-    <table class="table">
 
-    </table>
+<div class="container">
+	<h1>result</h1>
+    <div id="load_ctn"><div>
+
 </div>
-<script type="text/javascript" src="../res/js/jquery-2.0.3.min.js"/>
-<script type="text/javascript" src="../res/js/underscore-min.js"/>
-<script type="text/javascript" src="../js/result.js"/>
+<script type="text/template" id="load_time_tpl">
+	<%_.each(result,function(v,k){
+		var p = v.performance;
+		%>
+		<table class="table">
+		<tr>
+			<td><%= v.title||''%></td>
+			<td colspan="3"><%= v.url%></td>
+		<tr>
+		<tr>
+			<td>阶段</td>
+			<td>发起时间</td>
+			<td>长度</td>
+			<td>总计耗时</td>
+		 </tr>
+		<%_.each(p,function(pv,pk){%>
+			<tr>
+				<td><%= pk%></td>
+				<td><%= pv.start%></td>
+				<td><%= pv.length%></td>
+				<td><%= pv.total%></td>
+		    </tr>
+		 <%})%>
+	    </table>
+    <%})%>
+</script>
+<script type="text/javascript" src="../res/js/jquery-2.0.3.min.js"></script>
+<script type="text/javascript" src="../res/js/underscore-min.js"></script>
+<script type="text/javascript" src="../js/result.js"></script>
 </body>
 </html>

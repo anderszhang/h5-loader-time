@@ -25,6 +25,11 @@ h5.bg = {
        }else if(type == 'manualStop'){
          self.stop();
        }else if(type =="loadComplete"){
+         if(!self.scheduler.isAutoMode){
+             self.statistic.setTaskContext({
+              'url': sender.url
+             });
+         }
          self.statistic.savePagePerformance(request);
          if( self.scheduler.isAutoMode && self.scheduler.isRuning){
            self.next(request);
@@ -64,6 +69,7 @@ h5.bg = {
      var self = this;
      //注册update监听
      chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
+        self.openTab = tab;
         if(changeInfo && changeInfo.url && changeInfo.url.indexOf('chrome-devtools://')<0){
           self.statistic.setTaskContext(changeInfo);
         }
@@ -91,6 +97,7 @@ h5.bg = {
     this.analyze.setData(this.statistic.getData());
     this.analyze.start();
     chrome.tabs.update({
+      openerTabId: self.openTab,
       url : 'html/result.html'
     });
   },
