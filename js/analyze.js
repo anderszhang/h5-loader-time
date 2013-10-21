@@ -30,29 +30,30 @@ h5.analyze = {
 		var t = performance.timing,
         start = t.redirectStart == 0 ?t.fetchStart : t.redirectStart,
         total = t.loadEventEnd - start;
-		return {
-            redirect : this.getPageData(0, t.redirectEnd - t.redirectStart),
-            dns : this.getPageData(t.domainLookupStart - start, t.domainLookupEnd - t.domainLookupStart),
-            connect : this.getPageData(t.connectStart - start, t.connectEnd - t.connectStart),
-            request: this.getPageData( t.requestStart - start, t.responseStart - t.requestStart),
-            response: this.getPageData(t.responseStart - start, t.responseEnd - t.responseStart),
-            dom: this.getPageData(t.domLoading - start, t.domComplete - t.domLoading),
-            domInteractive: this.getPageData(t.domInteractive - start, 0, true),
-            contentLoaded: this.getPageData(t.domContentLoadedEventStart - start,
-                t.domContentLoadedEventEnd - t.domContentLoadedEventStart, true),
-            load:this.getPageData( t.loadEventStart - start, t.loadEventEnd - t.loadEventStart)
-        }
+		return [
+            this.getPageData('redirect',0, t.redirectEnd - t.redirectStart),
+            this.getPageData('dns',t.domainLookupStart - start, t.domainLookupEnd - t.domainLookupStart),
+            this.getPageData('connect',t.connectStart - start, t.connectEnd - t.connectStart),
+            this.getPageData('request', t.requestStart - start, t.responseStart - t.requestStart),
+            this.getPageData('response',t.responseStart - start, t.responseEnd - t.responseStart),
+            this.getPageData('dom',t.domLoading - start, t.domComplete - t.domLoading),
+            this.getPageData('domInteractive',t.domInteractive - start, 0, true),
+            this.getPageData('contentLoaded',t.domContentLoadedEventStart - start,
+               t.domContentLoadedEventEnd - t.domContentLoadedEventStart, true),
+            this.getPageData('load',t.loadEventStart - start, t.loadEventEnd - t.loadEventStart)
+        ]
 	},
 	
 	analyzeSrcs :function(){
 
 	},
 
-    getPageData: function(start, length, noacc){
+    getPageData: function(type,start, length, noacc){
         if (!noacc) {
             this.acc += length;
         }
         return {
+            "type": type,
             "start":start,
             "length":length,
             "total": noacc ? '-' : this.acc

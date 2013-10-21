@@ -25,14 +25,16 @@ h5.bg = {
        }else if(type == 'manualStop'){
          self.stop();
        }else if(type =="loadComplete"){
-         if(!self.scheduler.isAutoMode){
+         if(self.scheduler.isRuning){
+          if(!self.scheduler.isAutoMode){
              self.statistic.setTaskContext({
               'url': sender.url
              });
-         }
-         self.statistic.savePagePerformance(request);
-         if( self.scheduler.isAutoMode && self.scheduler.isRuning){
+          }
+          self.statistic.savePagePerformance(request);
+          if( self.scheduler.isAutoMode){
            self.next(request);
+           }
          }
        }
    });
@@ -67,6 +69,7 @@ h5.bg = {
      this.scheduler.setAutoMode(false);
      this.scheduler.start();
      var self = this;
+     chrome.storage.local.clear();
      //注册update监听
      chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
         self.openTab = tab;
