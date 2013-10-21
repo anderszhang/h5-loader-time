@@ -19,7 +19,7 @@ h5.bg = {
 
        var type = request.type;
        if(type == "autoStart"){
-         self.start();
+         self.start(request.config);
        }else if(type == 'manualStart'){
          self.manaulStart();
        }else if(type == 'manualStop'){
@@ -62,14 +62,18 @@ h5.bg = {
   },
 
 
-  start : function(){
+  start : function(taskSet){
+    var self = this;
+    if(taskSet){
+      this.scheduler.setTaskSet(taskSet);
+    }
     chrome.storage.local.clear();
     this.scheduler.setAutoMode(true);
     if(!this.scheduler.start()){
       return;
     };
-    var self = this,
-        task = this.scheduler.getCurTask();
+  
+    var task = this.scheduler.getCurTask();
     this.statistic.setTaskContext(task);
     chrome.tabs.create({
         url : task.url
@@ -77,7 +81,7 @@ h5.bg = {
       function(tab){
         self.openTab = tab;
      });
-
+    
   },
 
    //手动采集开始
@@ -145,7 +149,13 @@ h5.bg = {
 
       });
     });
-  }
+  },
+  isEmptyObject: function( obj ) { 
+    for ( var name in obj ) { 
+        return false; 
+    } 
+    return true; 
+  } 
 };
 
 h5.bg.init();
