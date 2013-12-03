@@ -33,7 +33,8 @@ h5.bg = {
           }
           self.statistic.savePagePerformance(request);
           if (self.scheduler.isAutoMode) {
-            //self.next(request);
+            self.next(request);
+            //self.stop();
           }
         }
       }
@@ -122,10 +123,10 @@ h5.bg = {
     this.scheduler.stop();
     this.analyze.setData(this.statistic.getData());
     this.analyze.start();
-//    chrome.tabs.update({
-//      openerTabId: self.openTab,
-//      url: 'html/result.html'
-//    });
+    chrome.tabs.update({
+      openerTabId: self.openTab,
+      url: 'html/result.html'
+    });
   },
 
   init: function () {

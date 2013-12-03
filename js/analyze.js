@@ -13,19 +13,19 @@ h5.analyze = {
     var result = [], data = this.data;
 
     for (var i in  data) {
-      var t = data[i];
+      var item = data[i];
       this.acc = 0;
-      var pData = {title: t.title, url: t.url};
+      var pData = {title: item.title, url: item.url};
 
-      if (t.performance) {
-        pData.performance = this.analyzePageLoad(t.performance)
+      if (item.performance) {
+        pData.performance = this.analyzePageLoad(item.performance)
       } else {
         //否则为单页应用
-        pData.performance = this.analyzeSPAPageLoad(t.srcs);
+        pData.performance = this.analyzeSPAPageLoad(item.srcs);
       }
-      //统计总的资源下载大小
-      pData.srcs = this.analyzeSrcs(t.srcs);
-
+      //统计资源下载大小
+      pData.srcs = this.analyzeSrcLoad(item);
+      console.log(pData);
       result.push(pData);
     }
     //console.log('save Data'  + {result:result});
@@ -73,8 +73,44 @@ h5.analyze = {
     ]
   },
 
-  //分析资源下载数据
-  analyzeSrcs: function (srcs) {
+  analyzeSrcLoad:function(item){
+    var srcs = this.groupSrcByType(item);
+    console.log('srcs');
+    console.log(srcs);
+    return this.calcSrcSizeByType(srcs);
+  },
+
+  groupSrcByType:function(item){
+    var result = {
+      main_frame: [],
+      sub_frame: [],
+      stylesheet: [],
+      script: [],
+      image: [],
+      object: [],
+      xmlhttprequest: [],
+      other: []
+    };
+    var reqStartMap = item.requestStartMap;
+    for(var key in reqStartMap){
+      var reqStartData = reqStartMap[key],
+        resStartData = item.responseStartMap[key],
+        resEndData = item.responseEndMap[key];
+      if(resStartData){
+        reqStartData.responseStartTime = resStartData.timeStamp;
+        reqStartData.responseHeaders = resStartData.responseHeaders;
+      }
+      if(resEndData){
+        reqStartData.fromCache = resEndData.fromCache;
+        reqStartData.completeEndTime = resEndData.timeStamp;
+      }
+
+      result[reqStartData.type].push(reqStartData);
+    }
+    return result;
+  },
+  //计算下载数据的大小
+  calcSrcSizeByType: function (srcs) {
     var result = [];
     for (var i in srcs) {
       var srcList = srcs[i];

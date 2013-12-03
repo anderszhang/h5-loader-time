@@ -13,20 +13,20 @@ h5.statistic = {
       TData.performance = data;
       this.dataContainer[TData.url] = TData;
     }
+  console.log(TData);
   },
 
   //保存请求发起时间
   saveSrcRequestTime: function (data) {
-      console.log("saveSrcRequestTime");
-      this.dataContainer[this.task.url ].requestStartQueue.push(data);
+    this.dataContainer[this.task.url ].requestStartMap[data.requestId] = data;
 //      var srcs = TData.srcs;
 //      srcs[data.type].push(data);
 //      this.dataContainer[TData.url ] = TData;
   },
 
   //保存资源响应开始时间
-  saveSrcResponseStartTime: function(data) {
-    this.dataContainer[this.task.url ].responseStartQueue.push(data);
+  saveSrcResponseStartTime: function (data) {
+    this.dataContainer[this.task.url ].responseStartMap[data.requestId] = data;
 //    if (TData) {
 //      var srcs = TData.srcs;
 //      var srcPfs = srcs[data.type];
@@ -42,12 +42,12 @@ h5.statistic = {
 //      this.dataContainer[TData.url ] = TData;
 //    }
   },
- //保存资源请求结束时间
+  //保存资源请求结束时间
   saveSrcCompleteTime: function (data) {
 //    var TData = this.getCurTaskData();
     //  var TData = this.getCurTaskData();
-   //   TData.responseStartQueue.push[data];
-    this.dataContainer[this.task.url ].responseEndQueue.push(data);
+    //   TData.responseStartMap.push[data];
+    this.dataContainer[this.task.url ].responseEndMap[data.requestId] = data;
 //    if (TData) {
 //      var srcs = TData.srcs;
 //      var srcPfs = srcs[data.type];
@@ -65,9 +65,9 @@ h5.statistic = {
     this.dataContainer[task.url] = {
       title: task.title,
       url: task.url,
-      requestStartQueue:[],
-      responseStartQueue: [],
-      responseEndQueue:[]
+      requestStartMap: {},
+      responseStartMap: {},
+      responseEndMap: {}
     };
   },
 
@@ -87,7 +87,7 @@ h5.statistic = {
     return this.dataContainer;
   },
 
-  clearData:function(){
+  clearData: function () {
     this.dataContainer = {};
     this.task = null;
     chrome.storage.local.clear();
