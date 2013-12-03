@@ -17,77 +17,66 @@ h5.statistic = {
 
   //保存请求发起时间
   saveSrcRequestTime: function (data) {
-    var TData = this.getCurTaskData();
-    if (TData) {
-      var srcs = TData.srcs;
-      srcs[data.type].push(data);
-      this.dataContainer[TData.url ] = TData;
-    }
+      console.log("saveSrcRequestTime");
+      this.dataContainer[this.task.url ].requestStartQueue.push(data);
+//      var srcs = TData.srcs;
+//      srcs[data.type].push(data);
+//      this.dataContainer[TData.url ] = TData;
   },
 
   //保存资源响应开始时间
-  saveSrcResponseStartTime: function (data) {
-    var TData = this.getCurTaskData();
-    if (TData) {
-      var srcs = TData.srcs;
-      var srcPfs = srcs[data.type];
-      //此处有优化空间
-      for (var i = 0; i < srcPfs.length; i++) {
-        if (srcPfs[i].requestId = data.requestId) {
-          srcPfs[i].responseStartTime = data.timeStamp;
-          srcPfs[i].responseHeaders = data.responseHeaders;
-          srcPfs[i].fromCache = data.fromCache;
-        }
-      }
-      //srcs[data.type].push(data);
-      this.dataContainer[TData.url ] = TData;
-    }
+  saveSrcResponseStartTime: function(data) {
+    this.dataContainer[this.task.url ].responseStartQueue.push(data);
+//    if (TData) {
+//      var srcs = TData.srcs;
+//      var srcPfs = srcs[data.type];
+//      //此处有优化空间
+//      for (var i = 0; i < srcPfs.length; i++) {
+//        if (srcPfs[i].requestId = data.requestId) {
+//          srcPfs[i].responseStartTime = data.timeStamp;
+//          srcPfs[i].responseHeaders = data.responseHeaders;
+//          srcPfs[i].fromCache = data.fromCache;
+//        }
+//      }
+//      //srcs[data.type].push(data);
+//      this.dataContainer[TData.url ] = TData;
+//    }
   },
  //保存资源请求结束时间
   saveSrcCompleteTime: function (data) {
-    var TData = this.getCurTaskData();
-    if (TData) {
-      var srcs = TData.srcs;
-      var srcPfs = srcs[data.type];
-      //此处有优化空间
-      for (var i = 0; i < srcPfs.length; i++) {
-        if (srcPfs[i].requestId = data.requestId) {
-          srcPfs[i].completeEndTime = data.timeStamp;
-        }
-      }
-      this.dataContainer[TData.url ] = TData;
-    }
+//    var TData = this.getCurTaskData();
+    //  var TData = this.getCurTaskData();
+   //   TData.responseStartQueue.push[data];
+    this.dataContainer[this.task.url ].responseEndQueue.push(data);
+//    if (TData) {
+//      var srcs = TData.srcs;
+//      var srcPfs = srcs[data.type];
+//      //此处有优化空间
+//      for (var i = 0; i < srcPfs.length; i++) {
+//        if (srcPfs[i].requestId = data.requestId) {
+//          srcPfs[i].completeEndTime = data.timeStamp;
+//        }
+//      }
+//      this.dataContainer[TData.url ] = TData;
+//    }
   },
   setTaskContext: function (task) {
-    return this.task = task;
+    this.task = task;
+    this.dataContainer[task.url] = {
+      title: task.title,
+      url: task.url,
+      requestStartQueue:[],
+      responseStartQueue: [],
+      responseEndQueue:[]
+    };
   },
 
   getCurTaskData: function () {
     if (!this.task) {
       return;
     }
-    var key = this.task.url, TData = null;
-    if (key) {
-      TData = this.dataContainer[key];
-      if (!TData) {
-        TData = {
-          title: this.task.title,
-          url: key,
-          srcs: {
-            main_frame: [],
-            sub_frame: [],
-            stylesheet: [],
-            script: [],
-            image: [],
-            object: [],
-            xmlhttprequest: [],
-            other: []
-          }
-        }
-        this.dataContainer[key] = TData;
-      }
-    }
-    return TData;
+    var key = this.task.url;
+    return this.dataContainer[key];
   },
 
   saveData: function () {

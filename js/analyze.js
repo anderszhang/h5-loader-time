@@ -120,6 +120,7 @@ h5.analyze = {
       for (var i = 0; i < ln; i++) {
         var header = headers[i];
         if (header.name == 'Content-Length') {
+          console.log(header.value + " :" +src.url );
           return +header.value
         }
       }
