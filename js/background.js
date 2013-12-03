@@ -33,7 +33,7 @@ h5.bg = {
           }
           self.statistic.savePagePerformance(request);
           if (self.scheduler.isAutoMode) {
-            self.next(request);
+            //self.next(request);
           }
         }
       }
@@ -67,7 +67,8 @@ h5.bg = {
     if (taskSet) {
       this.scheduler.setTaskSet(taskSet);
     }
-    chrome.storage.local.clear();
+    this.statistic.clearData();
+    //chrome.storage.local.clear();
     this.scheduler.setAutoMode(true);
     if (!this.scheduler.start()) {
       return;
@@ -90,7 +91,8 @@ h5.bg = {
     this.scheduler.setAutoMode(false);
     this.scheduler.start();
     var self = this;
-    chrome.storage.local.clear();
+    this.statistic.clearData();
+    //chrome.storage.local.clear();
     //注册update监听
     chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
       self.openTab = tab;
@@ -120,10 +122,10 @@ h5.bg = {
     this.scheduler.stop();
     this.analyze.setData(this.statistic.getData());
     this.analyze.start();
-    chrome.tabs.update({
-      openerTabId: self.openTab,
-      url: 'html/result.html'
-    });
+//    chrome.tabs.update({
+//      openerTabId: self.openTab,
+//      url: 'html/result.html'
+//    });
   },
 
   init: function () {
