@@ -159,6 +159,13 @@ h5.analyze = {
   _getFileName: function(url){
     var startIndex = url.lastIndexOf('\/') + 1;
     var endIndex = url.indexOf('?');
+    if(endIndex == -1){
+      if(url.indexOf('=')>0){
+        endIndex = url.lastIndexOf('\/',10) + 1;
+      }else{
+        endIndex = url.length
+      }
+    }
     endIndex = endIndex == -1 ?url.length:endIndex;
     return url.substring(startIndex,endIndex);
   }
