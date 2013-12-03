@@ -11,18 +11,21 @@ h5.analyze = {
       return;
     }
     var result = [], data = this.data;
+
     for (var i in  data) {
       var t = data[i];
       this.acc = 0;
       var pData = {title: t.title, url: t.url};
-      console.log(t);
+
       if (t.performance) {
         pData.performance = this.analyzePageLoad(t.performance)
       } else {
         //否则为单页应用
         pData.performance = this.analyzeSPAPageLoad(t.srcs);
       }
+      //统计总的资源下载大小
       pData.srcs = this.analyzeSrcs(t.srcs);
+
       result.push(pData);
     }
     //console.log('save Data'  + {result:result});
@@ -70,16 +73,18 @@ h5.analyze = {
     ]
   },
 
+  //分析资源下载数据
   analyzeSrcs: function (srcs) {
     var result = [];
     for (var i in srcs) {
       var srcList = srcs[i];
       var ln = srcList.length;
       if (ln > 0) {
-        var obj = {type: i, totalCount: ln},
+        var obj = {type: i, totalCount: ln , items: []},
           cacheCount = 0,
           totalSize = 0,
-          cacheSize = 0;
+          cacheSize = 0,
+          item = {};;
         for (var j = 0; j < ln; j++) {
           if (this.isFilterSrc(srcList[j].url)) {
             continue;
@@ -90,6 +95,13 @@ h5.analyze = {
             cacheCount++;
           }
           totalSize += size;
+          item  = {
+            name: this._getFileName(srcList[j].url),
+            url : srcList[j].url,
+            size : size,
+            fromCache : srcList[j].fromCache
+          }
+          obj.items.push(item);
         }
         obj.cacheCount = cacheCount;
         obj.totalSize = totalSize;
@@ -100,6 +112,7 @@ h5.analyze = {
     return result;
   },
 
+  //获得资源大小
   getSrcSize: function (src) {
     var headers = src.responseHeaders;
     if (headers) {
@@ -141,5 +154,12 @@ h5.analyze = {
       }
     }
     return false;
+  },
+
+  _getFileName: function(url){
+    var startIndex = url.lastIndexOf('\/') + 1;
+    var endIndex = url.indexOf('?');
+    endIndex = endIndex == -1 ?url.length:endIndex;
+    return url.substring(startIndex,endIndex);
   }
 }

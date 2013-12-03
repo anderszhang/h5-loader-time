@@ -67,12 +67,11 @@ h5.bg = {
     if (taskSet) {
       this.scheduler.setTaskSet(taskSet);
     }
-    chrome.storage.local.clear();
+    this.statistic.clearData();
     this.scheduler.setAutoMode(true);
     if (!this.scheduler.start()) {
       return;
     }
-    ;
 
     var task = this.scheduler.getCurTask();
     this.statistic.setTaskContext(task);
@@ -82,7 +81,6 @@ h5.bg = {
       function (tab) {
         self.openTab = tab;
       });
-
   },
 
   //手动采集开始
@@ -90,7 +88,7 @@ h5.bg = {
     this.scheduler.setAutoMode(false);
     this.scheduler.start();
     var self = this;
-    chrome.storage.local.clear();
+
     //注册update监听
     chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
       self.openTab = tab;

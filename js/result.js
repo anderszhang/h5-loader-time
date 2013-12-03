@@ -6,7 +6,6 @@
  * To change this template use File | Settings | File Templates.
  */
 ;
-
 $(function () {
   $('#nav_tabs').click(function (e) {
     var tab = $(e.target).parent();

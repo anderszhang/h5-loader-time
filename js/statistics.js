@@ -4,9 +4,9 @@
 var h5 = window.h5 || {};
 h5.statistic = {
   task: null,
-
   dataContainer: {},
 
+  //保存页面载入性能数据
   savePagePerformance: function (data) {
     var TData = this.getCurTaskData();
     if (TData) {
@@ -15,6 +15,7 @@ h5.statistic = {
     }
   },
 
+  //保存请求发起时间
   saveSrcRequestTime: function (data) {
     var TData = this.getCurTaskData();
     if (TData) {
@@ -24,6 +25,7 @@ h5.statistic = {
     }
   },
 
+  //保存资源响应开始时间
   saveSrcResponseStartTime: function (data) {
     var TData = this.getCurTaskData();
     if (TData) {
@@ -41,7 +43,7 @@ h5.statistic = {
       this.dataContainer[TData.url ] = TData;
     }
   },
-
+ //保存资源请求结束时间
   saveSrcCompleteTime: function (data) {
     var TData = this.getCurTaskData();
     if (TData) {
@@ -94,5 +96,11 @@ h5.statistic = {
 
   getData: function () {
     return this.dataContainer;
+  },
+
+  clearData:function(){
+    this.dataContainer = {};
+    this.task = null;
+    chrome.storage.local.clear();
   }
 };

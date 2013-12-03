@@ -74,6 +74,15 @@
         <td><%= sv.cacheCount%></td>
         <td><%= sv.cacheSize%></td>
     </tr>
+        <% _.each(sv.items,function(item,pk){%>
+        <tr>
+            <td><%= item.name%></td>
+            <td><%= 1 %></td>
+            <td><%= item.size%></td>
+            <td><%= item.fromCache%></td>
+            <td><%= item.size%></td>
+        </tr>
+        <%})%>
     <%})%>
     <tr>
         <td colspan="5"></td>
